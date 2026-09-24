@@ -12,17 +12,16 @@
 :root{--bg:#0a0f1e;--card:#131a2e;--card2:#1a2340;--line:#26304d;--text:#e8ecf8;
   --muted:#8b96b8;--accent:#4f8cff;--good:#2ecc71;--bad:#ff4d5e;--warn:#ffb020}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:#0a0f1e;color:var(--text);
-  font-family:-apple-system,system-ui,sans-serif;min-height:100vh}
+body{background:#0a0f1e;color:var(--text);font-family:-apple-system,system-ui,sans-serif;min-height:100vh}
 .hidden{display:none!important}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-input,select{font-family:inherit}
+input{font-family:inherit}
 .muted{color:var(--muted)}
 
 .login{position:fixed;inset:0;display:grid;place-items:center;padding:22px;z-index:200;
   background:radial-gradient(600px 400px at 50% 30%,#1b2a52 0,transparent 70%),var(--bg)}
 .lc{width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);
-  border-radius:22px;padding:40px 26px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+  border-radius:22px;padding:40px 26px;text-align:center}
 .lc .logo{font-size:52px;margin-bottom:14px}
 .lc h1{font-size:25px;margin-bottom:8px}
 .lc p{font-size:13.5px;margin-bottom:26px}
@@ -32,7 +31,7 @@ input,select{font-family:inherit}
 .code-in:focus{border-color:var(--accent)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
   padding:12px 18px;border-radius:12px;font-size:14px;font-weight:600;
-  border:1px solid var(--line);background:var(--card2);color:var(--text);transition:.15s}
+  border:1px solid var(--line);background:var(--card2);color:var(--text)}
 .btn:active{transform:scale(.97)}
 .btn.primary{background:linear-gradient(135deg,var(--accent),#3a6fe0);border-color:transparent}
 .btn.danger{background:rgba(255,77,94,.12);border-color:rgba(255,77,94,.4);color:#ff8090}
@@ -63,8 +62,7 @@ input,select{font-family:inherit}
 .stat .v small{font-size:12.5px;font-weight:500;color:var(--muted);margin-left:4px}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:13px}
-.child{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px;transition:.2s}
-.child:hover{border-color:#33406a}
+.child{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px}
 .child.locked{border-color:rgba(255,77,94,.45);background:linear-gradient(180deg,rgba(255,77,94,.07),var(--card))}
 .child.offline{opacity:.72}
 .child-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
@@ -98,11 +96,6 @@ input,select{font-family:inherit}
   border-radius:20px;padding:24px;max-height:88vh;overflow-y:auto}
 .md h3{font-size:19px;margin-bottom:6px}
 .md .sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
-.fld{margin-bottom:15px}
-.fld label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:7px}
-.fld input,.fld select{width:100%;padding:12px 14px;background:var(--card2);
-  border:1px solid var(--line);border-radius:11px;color:var(--text);font-size:14px;outline:none}
-.fld input:focus,.fld select:focus{border-color:var(--accent)}
 .macts{display:flex;gap:9px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}
 .macts .btn{flex:1;min-width:100px}
 
@@ -112,16 +105,22 @@ input,select{font-family:inherit}
 .approw .pk{font-size:10.5px;color:var(--muted);font-family:monospace;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sw{position:relative;width:46px;height:26px;background:#2a3555;border-radius:99px;
-  flex:none;cursor:pointer;transition:.2s;border:1px solid var(--line)}
+  flex:none;cursor:pointer;border:1px solid var(--line);transition:.2s}
 .sw::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;
   border-radius:50%;background:#fff;transition:.22s}
 .sw.on{background:var(--bad);border-color:var(--bad)}
 .sw.on::after{transform:translateX(20px)}
 
 .pairbox{background:var(--card2);border:2px dashed var(--line);border-radius:14px;
-  padding:22px;text-align:center;margin:16px 0}
-.pairbox .cd{font-size:38px;font-weight:800;letter-spacing:9px;
-  font-family:monospace;color:#7aa7ff;margin-bottom:8px}
+  padding:26px 22px;text-align:center;margin:16px 0}
+.pairbox .cd{font-size:44px;font-weight:800;letter-spacing:12px;
+  font-family:monospace;color:#7aa7ff;margin-bottom:10px;user-select:text;-webkit-user-select:text}
+.pairbox .lbl{font-size:12px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.waiting{display:flex;align-items:center;justify-content:center;gap:9px;
+  font-size:13px;color:var(--warn);margin-top:14px}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,176,32,.3);
+  border-top-color:var(--warn);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty .big{font-size:52px;margin-bottom:14px;opacity:.45}
@@ -137,7 +136,7 @@ input,select{font-family:inherit}
 
 .fab{position:fixed;right:18px;bottom:18px;width:58px;height:58px;border-radius:50%;
   background:linear-gradient(135deg,var(--accent),#3a6fe0);display:grid;place-items:center;
-  font-size:26px;z-index:60;transition:.2s}
+  font-size:26px;z-index:60}
 .fab:active{transform:scale(.95)}
 
 @media(max-width:600px){
@@ -187,7 +186,7 @@ input,select{font-family:inherit}
   <div class="empty hidden" id="empty">
     <div class="big">👨‍👩‍👧</div>
     <h3>No children linked yet</h3>
-    <p>Tap ＋ to create a pairing code,<br>then enter it in the child's app.</p>
+    <p>Tap ＋ to generate a code,<br>then enter it in the child's app.</p>
   </div>
 </div>
 
@@ -198,7 +197,6 @@ input,select{font-family:inherit}
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
-/* ==================== YOUR CONFIG ==================== */
 const firebaseConfig = {
   apiKey: "AIzaSyDJqJcWtYQKwf5oKBcW6my9tLFC7yRAyZs",
   authDomain: "famynb1.firebaseapp.com",
@@ -232,7 +230,7 @@ function toast(msg, kind){
     el.style.transition = "opacity .3s";
     el.style.opacity = "0";
     setTimeout(() => el.remove(), 320);
-  }, 3000);
+  }, 3200);
 }
 
 function ago(ts){
@@ -245,7 +243,6 @@ function ago(ts){
 }
 function isOnline(ts){ return ts && (Date.now() - ts < 90000); }
 
-/* ---------- LOGIN ---------- */
 function unlock(){
   sessionStorage.setItem(SKEY, "1");
   $("#loginView").classList.add("hidden");
@@ -261,33 +258,23 @@ function lock(){
   $("#fab").classList.add("hidden");
   $("#loginView").classList.remove("hidden");
   $("#codeInput").value = "";
-  toast("Locked 🔒", "warn");
 }
 
 $("#loginForm").addEventListener("submit", e => {
   e.preventDefault();
   const v = $("#codeInput").value.trim();
-  if(v === MASTER_CODE){
-    $("#loginErr").textContent = "";
-    unlock();
-  } else {
-    $("#loginErr").textContent = "❌ Invalid code";
-    $("#codeInput").value = "";
-  }
+  if(v === MASTER_CODE){ $("#loginErr").textContent = ""; unlock(); }
+  else{ $("#loginErr").textContent = "❌ Invalid code"; $("#codeInput").value = ""; }
 });
 $("#btnLogout").addEventListener("click", lock);
 
-/* ---------- FIRESTORE ---------- */
 function startListening(){
   if(unsub) return;
   $("#stSync").textContent = "Connecting…";
   unsub = CHILDREN.onSnapshot(
     snap => {
       children = [];
-      snap.forEach(d => {
-        const data = d.data() || {};
-        children.push(Object.assign({ id: d.id }, data));
-      });
+      snap.forEach(d => children.push(Object.assign({ id: d.id }, d.data() || {})));
       children.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
       $("#stSync").textContent = "Live ●";
       render();
@@ -300,11 +287,9 @@ function startListening(){
   );
 }
 
-/* ---------- RENDER ---------- */
 function render(){
   const online = children.filter(c => isOnline(c.lastSeen)).length;
   const locked = children.filter(c => c.locked).length;
-
   $("#stTotal").innerHTML  = children.length + "<small>linked</small>";
   $("#stOnline").innerHTML = online + "<small>active</small>";
   $("#stLocked").innerHTML = locked + "<small>phones</small>";
@@ -320,12 +305,10 @@ function render(){
     const on = isOnline(c.lastSeen);
     const bat = (typeof c.battery === "number" && c.battery >= 0) ? c.battery : null;
     const batC = bat === null ? "#8b96b8" : bat > 50 ? "#2ecc71" : bat > 20 ? "#ffb020" : "#ff4d5e";
-
     const badge = c.locked
       ? '<span class="badge lk">🔒 Locked</span>'
       : on ? '<span class="badge on">● Online</span>'
            : '<span class="badge off">Offline</span>';
-
     return '' +
     '<div class="child ' + (c.locked ? 'locked' : '') + ' ' + (on ? '' : 'offline') + '">' +
       '<div class="child-head">' +
@@ -353,7 +336,6 @@ function render(){
   }).join("");
 }
 
-/* ---------- ACTIONS ---------- */
 $("#grid").addEventListener("click", async e => {
   const b = e.target.closest("button[data-act]");
   if(!b) return;
@@ -362,7 +344,6 @@ $("#grid").addEventListener("click", async e => {
   const child = children.find(c => c.id === id);
   if(!child) return;
   const ref = CHILDREN.doc(id);
-
   try {
     if(act === "lock"){
       await ref.update({ locked: true, lockedAt: Date.now() });
@@ -385,7 +366,6 @@ $("#grid").addEventListener("click", async e => {
   }
 });
 
-/* ---------- MODAL ---------- */
 function modal(html){
   const bd = document.createElement("div");
   bd.className = "bd";
@@ -395,53 +375,68 @@ function modal(html){
   return bd;
 }
 
-/* ---------- ADD CHILD ---------- */
+/* =========================================================
+   PAIRING — no Firestore write from parent.
+   Parent generates code → modal watches children/{code}
+   → when child's app creates the doc → modal closes
+   ========================================================= */
 function addChild(){
   const code = String(Math.floor(100000 + Math.random() * 900000));
   const bd = modal(
-    '<h3>＋ Link a child</h3>' +
-    '<p class="sub">Enter this code in the child\'s app.</p>' +
+    '<h3>Link a child</h3>' +
+    '<p class="sub">Open the FamilyGuard app on the child\'s phone ' +
+      'and enter this code. It will link automatically.</p>' +
     '<div class="pairbox">' +
       '<div class="cd">' + code + '</div>' +
-      '<div class="muted" style="font-size:12px">Pairing code</div>' +
+      '<div class="lbl">Pairing Code</div>' +
+      '<div class="waiting"><div class="spinner"></div> Waiting for child device…</div>' +
     '</div>' +
-    '<div class="fld"><label>Child\'s name</label>' +
-      '<input id="cn" placeholder="e.g. Sara" maxlength="30"></div>' +
     '<div class="macts">' +
       '<button class="btn" data-x="cancel">Cancel</button>' +
-      '<button class="btn primary" data-x="create">Create</button>' +
     '</div>'
   );
-  bd.addEventListener("click", async e => {
-    const b = e.target.closest("button[data-x]");
-    if(!b) return;
-    if(b.dataset.x === "cancel"){ bd.remove(); return; }
-    const name = bd.querySelector("#cn").value.trim() || "Child";
-    b.querySelector("button, span").textContent = "Creating…";
-    try {
-      await CHILDREN.doc(code).set({
-        name: name,
-        model: "Waiting for device…",
-        battery: -1,
-        locked: false,
-        lastSeen: null,
-        blockedApps: [],
-        installedApps: [],
-        pairingCode: code,
-        createdAt: Date.now()
-      });
-      bd.remove();
-      toast("Code " + code + " ready", "good");
-    } catch (err) {
-      console.error(err);
+
+  let pairUnsub = null;
+  let done = false;
+
+  pairUnsub = CHILDREN.doc(code).onSnapshot(
+    snap => {
+      if(done) return;
+      if(snap.exists){
+        done = true;
+        const data = snap.data() || {};
+        if(pairUnsub) pairUnsub();
+        bd.remove();
+        toast("🎉 " + (data.name || "Device") + " linked successfully!", "good");
+      }
+    },
+    err => {
+      console.error("Pair watch error:", err);
       toast("⚠️ " + err.message, "bad");
     }
+  );
+
+  bd.addEventListener("click", e => {
+    const b = e.target.closest("button[data-x]");
+    if(!b) return;
+    done = true;
+    if(pairUnsub) pairUnsub();
+    bd.remove();
   });
+
+  // cleanup if backdrop tapped
+  const obs = new MutationObserver(() => {
+    if(!document.body.contains(bd)){
+      done = true;
+      if(pairUnsub) pairUnsub();
+      obs.disconnect();
+    }
+  });
+  obs.observe(document.body, { childList: true });
 }
 $("#btnAdd").addEventListener("click", addChild);
 $("#fab").addEventListener("click", addChild);
 
-/* ---------- APPS ---------- */
 function openApps(child){
   const apps = child.installedApps || [];
   const blocked = new Set(child.blockedApps || []);
@@ -469,16 +464,14 @@ function openApps(child){
       const cur = new Set(child.blockedApps || []);
       if(on) cur.add(pkg); else cur.delete(pkg);
       child.blockedApps = Array.from(cur);
-      try {
-        await CHILDREN.doc(child.id).update({ blockedApps: child.blockedApps });
-      } catch (err) { toast("⚠️ " + err.message, "bad"); }
+      try { await CHILDREN.doc(child.id).update({ blockedApps: child.blockedApps }); }
+      catch (err) { toast("⚠️ " + err.message, "bad"); }
       return;
     }
     if(e.target.closest("button[data-x]")) bd.remove();
   });
 }
 
-/* ---------- BOOT ---------- */
 if(sessionStorage.getItem(SKEY) === "1") unlock();
 else setTimeout(() => $("#codeInput").focus(), 200);
 </script>
