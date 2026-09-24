@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FamilyGuard">
+<title>FamilyGuard — Parent</title>
+<style>
+:root{
+  --bg:#0a0f1e; --card:#131a2e; --card2:#1a2340; --line:#26304d;
+  --text:#e8ecf8; --muted:#8b96b8; --accent:#4f8cff; --accent2:#7aa7ff;
+  --good:#2ecc71; --bad:#ff4d5e; --warn:#ffb020;
+  --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:radial-gradient(900px 500px at 20% -10%,#1c2a55 0%,transparent 60%),
+             radial-gradient(700px 500px at 110% 10%,#1b3a4d 0%,transparent 55%),var(--bg);
+  color:var(--text);
+  font-family:-apple-system,'Segoe UI',system-ui,Roboto,sans-serif;
+  min-height:100vh; -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:none;
+}
+.hidden{display:none!important}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit}
+.muted{color:var(--muted)}
+
+/* ---------- LOGIN ---------- */
+.login{position:fixed;inset:0;display:grid;place-items:center;padding:22px;z-index:200;
+  background:radial-gradient(700px 400px at 50% 30%,#1b2a52 0%,transparent 70%),var(--bg)}
+.login-card{width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);
+  border-radius:22px;padding:40px 26px;text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.5);animation:pop .4s ease}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+.login-card .logo{font-size:52px;margin-bottom:14px;filter:drop-shadow(0 0 22px rgba(79,140,255,.65))}
+.login-card h1{font-size:25px;margin-bottom:8px;letter-spacing:.4px}
+.login-card p{font-size:13.5px;margin-bottom:26px}
+.code-in{
+  width:100%;padding:16px;font-size:17px;letter-spacing:2px;text-align:center;
+  background:var(--card2);border:1px solid var(--line);border-radius:13px;
+  color:var(--text);outline:none;transition:.2s;margin-bottom:14px;
+}
+.code-in:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(79,140,255,.18)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:12px 18px;border-radius:12px;font-size:14px;font-weight:600;
+  border:1px solid var(--line);background:var(--card2);color:var(--text);
+  transition:.18s;white-space:nowrap;-webkit-user-select:none;user-select:none}
+.btn:hover{background:#222d4f}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#3a6fe0);border-color:transparent;
+  box-shadow:0 8px 22px rgba(79,140,255,.35)}
+.btn.danger{background:rgba(255,77,94,.12);border-color:rgba(255,77,94,.4);color:#ff8090}
+.btn.good{background:rgba(46,204,113,.12);border-color:rgba(46,204,113,.4);color:#5ee08f}
+.btn.wide{width:100%}
+.btn.tiny{padding:9px 13px;font-size:12.5px;border-radius:10px}
+.btn.big{padding:15px 20px;font-size:15px}
+.err{color:var(--bad);font-size:13px;min-height:18px;margin-top:10px}
+.shake{animation:shk .4s}
+@keyframes shk{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}
+40%{transform:translateX(10px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+
+/* ---------- APP ---------- */
+.app{max-width:1100px;margin:0 auto;padding:16px 14px 90px}
+.top{display:flex;align-items:center;gap:12px;padding:14px 18px;margin-bottom:16px;
+  background:linear-gradient(180deg,rgba(26,35,64,.92),rgba(19,26,46,.92));
+  border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:0 10px 30px rgba(0,0,0,.4);position:sticky;top:8px;z-index:50;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:17px}
+.brand .m{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:19px;
+  background:linear-gradient(135deg,var(--accent),#2b52b8);box-shadow:0 0 20px rgba(79,140,255,.5)}
+.top .sp{margin-left:auto;display:flex;gap:8px}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 17px;position:relative;overflow:hidden}
+.stat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+.stat.g::before{background:var(--good)} .stat.r::before{background:var(--bad)} .stat.w::before{background:var(--warn)}
+.stat .l{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:8px}
+.stat .v{font-size:26px;font-weight:700;line-height:1}
+.stat .v small{font-size:12.5px;font-weight:500;color:var(--muted);margin-left:4px}
+
+/* ---------- CHILD CARDS ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:13px}
+.child{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:17px;transition:.2s;position:relative;overflow:hidden}
+.child:hover{border-color:#33406a;box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.child.locked{border-color:rgba(255,77,94,.45);
+  background:linear-gradient(180deg,rgba(255,77,94,.07),var(--card))}
+.child.offline{opacity:.72}
+.child-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.avatar{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;font-size:24px;flex:none;
+  background:rgba(79,140,255,.13);border:1px solid rgba(79,140,255,.28)}
+.child.locked .avatar{background:rgba(255,77,94,.13);border-color:rgba(255,77,94,.32)}
+.child-head .info{min-width:0;flex:1}
+.child-head .nm{font-size:15.5px;font-weight:700;margin-bottom:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.child-head .dv{font-size:11.5px;color:var(--muted)}
+.badge{font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:4px 10px;border-radius:999px;flex:none}
+.badge.on{background:rgba(46,204,113,.15);color:#5ee08f;border:1px solid rgba(46,204,113,.35)}
+.badge.off{background:rgba(139,150,184,.12);color:var(--muted);border:1px solid var(--line)}
+.badge.lk{background:rgba(255,77,94,.15);color:#ff8090;border:1px solid rgba(255,77,94,.4)}
+
+.rows{display:grid;gap:7px;margin-bottom:14px;font-size:12.5px}
+.rows>div{display:flex;justify-content:space-between;gap:10px}
+.rows .k{color:var(--muted)}
+.rows .v{font-family:'SF Mono',Consolas,monospace;font-size:11.5px}
+.bar{height:6px;background:var(--card2);border-radius:4px;overflow:hidden;margin-top:3px}
+.bar>i{display:block;height:100%;border-radius:4px;transition:width .4s}
+
+.req{background:rgba(255,176,32,.1);border:1px solid rgba(255,176,32,.35);
+  border-radius:11px;padding:11px 13px;margin-bottom:12px;font-size:12.5px}
+.req .t{font-weight:700;color:var(--warn);margin-bottom:4px}
+.req .a{display:flex;gap:7px;margin-top:9px}
+.req .a .btn{flex:1;padding:8px;font-size:12px}
+
+.acts{display:flex;gap:7px;flex-wrap:wrap}
+.acts .btn{flex:1;min-width:78px}
+
+/* ---------- MODALS ---------- */
+.bd{position:fixed;inset:0;background:rgba(5,8,18,.78);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  display:grid;place-items:center;z-index:150;padding:16px;animation:fd .2s}
+@keyframes fd{from{opacity:0}to{opacity:1}}
+.md{width:100%;max-width:520px;background:var(--card);border:1px solid var(--line);
+  border-radius:20px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.6);
+  animation:pop .28s ease;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.md h3{font-size:19px;margin-bottom:6px}
+.md .sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+.fld{margin-bottom:15px}
+.fld label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:7px;letter-spacing:.3px}
+.fld input,.fld select,.fld textarea{width:100%;padding:12px 14px;background:var(--card2);
+  border:1px solid var(--line);border-radius:11px;color:var(--text);font-size:14px;outline:none;transition:.2s}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(79,140,255,.15)}
+.macts{display:flex;gap:9px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}
+.macts .btn{flex:1;min-width:100px}
+
+.approw{display:flex;align-items:center;gap:11px;padding:11px 13px;background:var(--card2);
+  border:1px solid var(--line);border-radius:11px;margin-bottom:8px;font-size:13.5px}
+.approw .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.approw .pk{font-size:10.5px;color:var(--muted);font-family:monospace;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sw{position:relative;width:46px;height:26px;background:#2a3555;border-radius:99px;
+  flex:none;cursor:pointer;transition:.2s;border:1px solid var(--line)}
+.sw::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;
+  border-radius:50%;background:#fff;transition:.22s;box-shadow:0 2px 5px rgba(0,0,0,.3)}
+.sw.on{background:var(--bad);border-color:var(--bad)}
+.sw.on::after{transform:translateX(20px)}
+
+.pairbox{background:var(--card2);border:2px dashed var(--line);border-radius:14px;
+  padding:22px;text-align:center;margin:16px 0}
+.pairbox .cd{font-size:38px;font-weight:800;letter-spacing:9px;
+  font-family:'SF Mono',Consolas,monospace;color:var(--accent2);margin-bottom:8px}
+
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .big{font-size:52px;margin-bottom:14px;opacity:.45}
+.empty h3{color:var(--text);font-size:17px;margin-bottom:8px}
+
+/* ---------- TOASTS ---------- */
+#tst{position:fixed;left:14px;right:14px;bottom:14px;display:flex;flex-direction:column;
+  gap:9px;z-index:300;pointer-events:none;align-items:center}
+.tst{background:var(--card2);border:1px solid var(--line);border-left:4px solid var(--accent);
+  border-radius:12px;padding:13px 18px;font-size:13.5px;box-shadow:0 12px 30px rgba(0,0,0,.5);
+  animation:sl .3s ease;max-width:400px;width:100%;pointer-events:auto}
+.tst.good{border-left-color:var(--good)} .tst.bad{border-left-color:var(--bad)}
+.tst.warn{border-left-color:var(--warn)}
+@keyframes sl{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+
+.fab{position:fixed;right:18px;bottom:18px;width:58px;height:58px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),#3a6fe0);display:grid;place-items:center;
+  font-size:26px;box-shadow:0 10px 30px rgba(79,140,255,.5);z-index:60;transition:.2s}
+.fab:hover{transform:scale(1.08)}
+.fab:active{transform:scale(.95)}
+
+@media(max-width:600px){
+  .app{padding:12px 10px 100px}
+  .top{padding:12px 14px;gap:9px}
+  .brand{font-size:15px} .brand .m{width:34px;height:34px;font-size:17px}
+  .top .sp .btn span{display:none}
+  .stat .v{font-size:22px}
+  .grid{grid-template-columns:1fr}
+  .md{padding:20px;border-radius:16px}
+  .macts{flex-direction:column-reverse}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div class="login" id="loginView">
+  <form class="login-card" id="loginForm" autocomplete="off">
+    <div class="logo">🛡️</div>
+    <h1>FamilyGuard</h1>
+    <p class="muted">Enter your master security code</p>
+    <input class="code-in" id="codeInput" type="password" inputmode="numeric"
+           placeholder="• • • • • • • • • • • •" autocomplete="off">
+    <button class="btn primary wide big" type="submit">Unlock Dashboard</button>
+    <div class="err" id="loginErr"></div>
+  </form>
+</div>
+
+<!-- ============ APP ============ -->
+<div class="app hidden" id="appView">
+
+  <div class="top">
+    <div class="brand"><div class="m">🛡️</div> FamilyGuard</div>
+    <div class="sp">
+      <button class="btn tiny" id="btnAdd">＋ <span>Add</span></button>
+      <button class="btn tiny danger" id="btnLogout">🔒</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat g"><div class="l">Children</div>
+      <div class="v" id="stTotal">0<small>linked</small></div></div>
+    <div class="stat"><div class="l">Online</div>
+      <div class="v" id="stOnline">0<small>active</small></div></div>
+    <div class="stat r"><div class="l">Locked</div>
+      <div class="v" id="stLocked">0<small>phones</small></div></div>
+    <div class="stat w"><div class="l">Requests</div>
+      <div class="v" id="stReq">0<small>pending</small></div></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="empty hidden" id="empty">
+    <div class="big">👨‍👩‍👧</div>
+    <h3>No children linked yet</h3>
+    <p>Tap the ＋ button to generate a pairing code.<br>
+       Install the FamilyGuard app on your child's phone and enter it.</p>
+  </div>
+
+</div>
+
+<button class="fab hidden" id="fab">＋</button>
+<div id="tst"></div>
+<div id="modalRoot"></div>
+
+<!-- ============ FIREBASE ============ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, collection, doc, onSnapshot, setDoc, updateDoc,
+  deleteDoc, serverTimestamp, query, orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* =========================================================
+   1) FIREBASE CONFIG  —  REPLACE with your project values
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const CHILDREN = collection(db, "children");
+
+/* =========================================================
+   2) MASTER CODE  —  change after first login
+   ========================================================= */
+const MASTER_CODE = "70233833702339337188868081233933";
+
+/* =========================================================
+   3) STATE + HELPERS
+   ========================================================= */
+let children = [];
+let unsub = null;
+const $ = s => document.querySelector(s);
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function toast(msg, kind){
+  const el = document.createElement("div");
+  el.className = "tst " + (kind||"");
+  el.textContent = msg;
+  $("#tst").appendChild(el);
+  setTimeout(()=>{
+    el.style.transition="opacity .3s,transform .3s";
+    el.style.opacity="0"; el.style.transform="translateY(30px)";
+    setTimeout(()=>el.remove(),320);
+  }, 3000);
+}
+
+function ago(ts){
+  if(!ts) return "never";
+  const s = Math.floor((Date.now()-ts)/1000);
+  if(s<45) return "just now";
+  if(s<3600) return Math.floor(s/60)+"m ago";
+  if(s<86400) return Math.floor(s/3600)+"h ago";
+  return Math.floor(s/86400)+"d ago";
+}
+
+function isOnline(ts){ return ts && (Date.now()-ts < 90000); }
+
+/* =========================================================
+   4) LOGIN
+   ========================================================= */
+const SKEY = "fg_unlocked";
+function unlock(){
+  sessionStorage.setItem(SKEY,"1");
+  $("#loginView").classList.add("hidden");
+  $("#appView").classList.remove("hidden");
+  $("#fab").classList.remove("hidden");
+  startListening();
+  toast("Welcome back 👋","good");
+}
+function lock(){
+  sessionStorage.removeItem(SKEY);
+  if(unsub){ unsub(); unsub=null; }
+  $("#appView").classList.add("hidden");
+  $("#fab").classList.add("hidden");
+  $("#loginView").classList.remove("hidden");
+  $("#codeInput").value = "";
+  toast("Dashboard locked 🔒","warn");
+}
+
+$("#loginForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const v = $("#codeInput").value.trim();
+  if(v === MASTER_CODE){ $("#loginErr").textContent=""; unlock(); }
+  else{
+    $("#loginErr").textContent = "❌ Invalid code";
+    const c = document.querySelector(".login-card");
+    c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake");
+    $("#codeInput").value = "";
+  }
+});
+$("#btnLogout").addEventListener("click", lock);
+
+/* =========================================================
+   5) FIRESTORE LISTENER
+   ========================================================= */
+function startListening(){
+  if(unsub) return;
+  unsub = onSnapshot(CHILDREN, snap=>{
+    children = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+    children.sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+    render();
+  }, err => {
+    console.error(err);
+    toast("⚠️ " + err.code + " — check Firebase rules","bad");
+  });
+}
+
+/* =========================================================
+   6) RENDER
+   ========================================================= */
+function render(){
+  const online  = children.filter(c=>isOnline(c.lastSeen)).length;
+  const locked  = children.filter(c=>c.locked).length;
+  const reqs    = children.reduce((a,c)=>a+(c.unlockRequests?.length||0),0);
+
+  $("#stTotal").innerHTML  = children.length + "<small>linked</small>";
+  $("#stOnline").innerHTML = online  + "<small>active</small>";
+  $("#stLocked").innerHTML = locked  + "<small>phones</small>";
+  $("#stReq").innerHTML    = reqs    + "<small>pending</small>";
+
+  if(!children.length){
+    $("#grid").innerHTML = "";
+    $("#empty").classList.remove("hidden");
+    return;
+  }
+  $("#empty").classList.add("hidden");
+
+  $("#grid").innerHTML = children.map(c => {
+    const on   = isOnline(c.lastSeen);
+    const bat  = c.battery ?? null;
+    const batC = bat===null ? "var(--muted)"
+              : bat>50 ? "var(--good)"
+              : bat>20 ? "var(--warn)" : "var(--bad)";
+    const req  = (c.unlockRequests||[])[0];
+
+    const badge = c.locked
+      ? '<span class="badge lk">🔒 Locked</span>'
+      : on ? '<span class="badge on">● Online</span>'
+           : '<span class="badge off">Offline</span>';
+
+    return `
+    <div class="child ${c.locked?'locked':''} ${on?'':'offline'}">
+      <div class="child-head">
+        <div class="avatar">${c.locked?'🔒':'📱'}</div>
+        <div class="info">
+          <div class="nm">${esc(c.name||"Unnamed")}</div>
+          <div class="dv">${esc(c.model||"Android device")}</div>
+        </div>
+        ${badge}
+      </div>
+
+      ${req ? `
+      <div class="req">
+        <div class="t">🔔 Unlock request</div>
+        <div>${esc(req.reason||"Child wants to use phone")} · ${ago(req.at)}</div>
+        <div class="a">
+          <button class="btn good tiny" data-act="approve" data-id="${c.id}">✅ Approve</button>
+          <button class="btn danger tiny" data-act="deny" data-id="${c.id}">❌ Deny</button>
+        </div>
+      </div>` : ""}
+
+      <div class="rows">
+        <div><span class="k">Last seen</span><span class="v">${ago(c.lastSeen)}</span></div>
+        <div><span class="k">Battery</span>
+          <span class="v">${bat===null?'—':bat+'%'}</span></div>
+        ${bat!==null?`<div style="grid-column:1/-1"><div class="bar">
+          <i style="width:${bat}%;background:${batC}"></i></div></div>`:""}
+        <div><span class="k">Blocked apps</span>
+          <span class="v">${(c.blockedApps||[]).length}</span></div>
+        <div><span class="k">Installed apps</span>
+          <span class="v">${(c.installedApps||[]).length}</span></div>
+        <div><span class="k">Bedtime</span>
+          <span class="v">${c.schedule?.enabled
+            ? esc((c.schedule.from||"21:00")+" → "+(c.schedule.to||"07:00"))
+            : "off"}</span></div>
+      </div>
+
+      <div class="acts">
+        ${c.locked
+          ? `<button class="btn good tiny" data-act="unlock" data-id="${c.id}">🔓 Unlock</button>`
+          : `<button class="btn danger tiny" data-act="lock" data-id="${c.id}">🔒 Lock</button>`}
+        <button class="btn tiny" data-act="apps" data-id="${c.id}">📦 Apps</button>
+        <button class="btn tiny" data-act="sched" data-id="${c.id}">⏰ Schedule</button>
+        <button class="btn tiny danger" data-act="del" data-id="${c.id}">🗑️</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+/* =========================================================
+   7) ACTIONS
+   ========================================================= */
+$("#grid").addEventListener("click", async e=>{
+  const b = e.target.closest("button[data-act]");
+  if(!b) return;
+  const id = b.dataset.id;
+  const act = b.dataset.act;
+  const child = children.find(c=>c.id===id);
+  if(!child) return;
+  const ref = doc(db, "children", id);
+
+  try{
+    if(act==="lock"){
+      await updateDoc(ref,{ locked:true, lockedAt: serverTimestamp(),
+        lockedBy:"parent", unlockRequests:[] });
+      toast(`🔒 ${child.name} locked`,"bad");
+    }
+    if(act==="unlock"){
+      await updateDoc(ref,{ locked:false, unlockedAt: serverTimestamp(),
+        unlockRequests:[] });
+      toast(`🔓 ${child.name} unlocked`,"good");
+    }
+    if(act==="approve"){
+      await updateDoc(ref,{ locked:false, unlockedAt: serverTimestamp(),
+        unlockRequests:[] });
+      toast(`✅ Approved for ${child.name}`,"good");
+    }
+    if(act==="deny"){
+      const rest = (child.unlockRequests||[]).slice(1);
+      await updateDoc(ref,{ unlockRequests: rest });
+      toast(`❌ Denied`,"warn");
+    }
+    if(act==="apps")  openApps(child);
+    if(act==="sched") openSchedule(child);
+    if(act==="del"){
+      if(confirm(`Remove ${child.name}? The child's app will stop syncing.`)){
+        await deleteDoc(ref);
+        toast("Child removed","warn");
+      }
+    }
+  }catch(err){
+    console.error(err);
+    toast("⚠️ " + err.message,"bad");
+  }
+});
+
+/* =========================================================
+   8) MODALS
+   ========================================================= */
+function modal(html){
+  const bd = document.createElement("div");
+  bd.className = "bd";
+  bd.innerHTML = `<div class="md">${html}</div>`;
+  bd.addEventListener("mousedown", e=>{ if(e.target===bd) bd.remove(); });
+  $("#modalRoot").appendChild(bd);
+  return bd;
+}
+function close(bd){ bd.remove(); }
+
+/* ---------- ADD CHILD ---------- */
+function addChild(){
+  const code = String(Math.floor(100000 + Math.random()*900000));
+  const bd = modal(`
+    <h3>＋ Link a child</h3>
+    <p class="sub">Install the FamilyGuard app on your child's Android phone.
+       On first launch it will ask for this pairing code.</p>
+    <div class="pairbox">
+      <div class="cd">${code}</div>
+      <div class="muted" style="font-size:12px">Pairing code · valid until used</div>
+    </div>
+    <div class="fld">
+      <label>Child's name</label>
+      <input id="cn" placeholder="e.g. Sara" maxlength="30">
+    </div>
+    <div class="macts">
+      <button class="btn" data-x="cancel">Cancel</button>
+      <button class="btn primary" data-x="create">Create & Wait</button>
+    </div>
+  `);
+  bd.addEventListener("click", async e=>{
+    const b = e.target.closest("button[data-x]");
+    if(!b) return;
+    if(b.dataset.x==="cancel"){ close(bd); return; }
+    const name = bd.querySelector("#cn").value.trim() || "Child";
+    try{
+      await setDoc(doc(db,"children",code),{
+        name, model:"Waiting for device…", battery:null,
+        locked:false, lastSeen:null, blockedApps:[],
+        installedApps:[], unlockRequests:[], schedule:{enabled:false},
+        pairingCode:code, createdAt: serverTimestamp()
+      });
+      close(bd);
+      toast(`Pairing code ${code} created · waiting for phone`,"good");
+    }catch(err){ toast("⚠️ "+err.message,"bad"); }
+  });
+}
+$("#btnAdd").addEventListener("click", addChild);
+$("#fab").addEventListener("click", addChild);
+
+/* ---------- APPS ---------- */
+function openApps(child){
+  const apps = child.installedApps || [];
+  const blocked = new Set(child.blockedApps || []);
+  const bd = modal(`
+    <h3>📦 Apps on ${esc(child.name)}'s phone</h3>
+    <p class="sub">Toggle to block or allow. Changes apply instantly.</p>
+    <div id="appList">
+      ${apps.length ? apps.map(a=>`
+        <div class="approw">
+          <div style="flex:1;min-width:0">
+            <div class="nm">${esc(a.name||a.pkg)}</div>
+            <div class="pk">${esc(a.pkg)}</div>
+          </div>
+          <div class="sw ${blocked.has(a.pkg)?'on':''}"
+               data-pkg="${esc(a.pkg)}"></div>
+        </div>`).join("")
+        : `<div class="muted" style="text-align:center;padding:30px">
+             No app data yet — wait for the child's phone to sync.</div>`}
+    </div>
+    <div class="macts"><button class="btn primary" data-x="done">Done</button></div>
+  `);
+  bd.addEventListener("click", async e=>{
+    const sw = e.target.closest(".sw");
+    if(sw){
+      const pkg = sw.dataset.pkg;
+      const on = sw.classList.toggle("on");
+      const ref = doc(db,"children",child.id);
+      const cur = new Set(child.blockedApps||[]);
+      on ? cur.add(pkg) : cur.delete(pkg);
+      child.blockedApps = [...cur];
+      try{ await updateDoc(ref,{ blockedApps: child.blockedApps }); }
+      catch(err){ toast("⚠️ "+err.message,"bad"); }
+      return;
+    }
+    if(e.target.closest("button[data-x]")) close(bd);
+  });
+}
+
+/* ---------- SCHEDULE ---------- */
+function openSchedule(child){
+  const s = child.schedule || {enabled:false, from:"21:00", to:"07:00"};
+  const bd = modal(`
+    <h3>⏰ Bedtime schedule</h3>
+    <p class="sub">Phone auto-locks during these hours every day.</p>
+    <div class="fld">
+      <label>Enable bedtime lock</label>
+      <select id="en">
+        <option value="1" ${s.enabled?"selected":""}>On</option>
+        <option value="0" ${!s.enabled?"selected":""}>Off</option>
+      </select>
+    </div>
+    <div class="fld"><label>Lock at</label>
+      <input id="from" type="time" value="${esc(s.from||"21:00")}"></div>
+    <div class="fld"><label>Unlock at</label>
+      <input id="to" type="time" value="${esc(s.to||"07:00")}"></div>
+    <div class="macts">
+      <button class="btn" data-x="cancel">Cancel</button>
+      <button class="btn primary" data-x="save">Save</button>
+    </div>
+  `);
+  bd.addEventListener("click", async e=>{
+    const b = e.target.closest("button[data-x]");
+    if(!b) return;
+    if(b.dataset.x==="cancel"){ close(bd); return; }
+    const sched = {
+      enabled: bd.querySelector("#en").value==="1",
+      from: bd.querySelector("#from").value,
+      to:   bd.querySelector("#to").value
+    };
+    try{
+      await updateDoc(doc(db,"children",child.id),{ schedule: sched });
+      close(bd);
+      toast("Schedule saved ⏰","good");
+    }catch(err){ toast("⚠️ "+err.message,"bad"); }
+  });
+}
+
+/* =========================================================
+   9) BOOT
+   ========================================================= */
+if(sessionStorage.getItem(SKEY)==="1") unlock();
+else setTimeout(()=>$("#codeInput").focus(),200);
+</script>
+</body>
+</html>
