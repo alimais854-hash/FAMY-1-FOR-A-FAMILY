@@ -253,14 +253,17 @@ import {
 /* =========================================================
    1) FIREBASE CONFIG  —  REPLACE with your project values
    ========================================================= */
+
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDJqJcWtYQKwf5oKBcW6my9tLFC7yRAyZs",
+  authDomain: "famynb1.firebaseapp.com",
+  projectId: "famynb1",
+  storageBucket: "famynb1.firebasestorage.app",
+  messagingSenderId: "1027137364549",
+  appId: "1:1027137364549:web:c4d4248713bf7cdbccb92c",
+  measurementId: "G-RLSPHG5KYK"
 };
+
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
 const CHILDREN = collection(db, "children");
